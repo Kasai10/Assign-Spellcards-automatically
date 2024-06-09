@@ -5,8 +5,18 @@ import shutil
 import glob
 import sys
 
+arguments = sys.argv
 
-dnd_folder_path = input("Input the path to your dnd folder: ")
+if("-edit" in arguments):
+    dnd_folder_path = input("Input the path to your dnd folder: ")
+    with open("Dndpath.txt", "w") as file:
+        file.write(dnd_folder_path)
+try:
+    with open("Dndpath.txt", "r") as file:
+        dnd_folder_path = file.readline()
+except:
+    print("Use -edit the first time you start in order to provide a dnd folder path.")
+    quit()
 character_sheets_dir = os.path.join(dnd_folder_path, "CharacterSheets")
 character_name = ""
 try:
