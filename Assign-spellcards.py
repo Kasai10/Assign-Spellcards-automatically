@@ -7,6 +7,16 @@ import sys
 
 arguments = sys.argv
 
+
+
+def copy_to_target_location(path, is_Spellcards):
+    # Destination path
+    destination = dnd_folder_path
+    if is_Spellcards:
+        shutil.copy(path, destination)
+    elif not is_Spellcards:
+        shutil.copy(path, character_sheets_dir)
+
 if("-edit" in arguments):
     dnd_folder_path = input("Input the path to your dnd folder: ")
     with open("Dndpath.txt", "w") as file:
@@ -25,8 +35,17 @@ try:
         characters[i] = characters[i].replace(".pdf", "")
 
 
-        while(True):      
+        while(True):
+            print("Press 'a' if you want to add a character to the directory!") 
             character_name = input(f"Input character name, the following files are present in the directory: {characters}: ")
+            if character_name == "a":
+                path_to_charactersheet = input("Input the path to the charactersheet here: ")
+                try:
+                    copy_to_target_location(path_to_charactersheet, False)
+                    continue
+                except:
+                    print("Sheet not found. Please try again!")
+                    continue
             spells_for_character = os.path.join(dnd_folder_path, "Spellcards " + character_name)
             if character_name in characters:
                 break
@@ -58,8 +77,12 @@ def make_spellcard_folder(character_name):
         else:
             print("Character already exists")
     except:
-        print(f"Directories were successfully created please put the charactersheets in the new charatersheets folder under: {character_sheets_dir}")
-        sys.exit(1)
+        spellcards_path = input("Path to Spellcards folder: ")
+        copy_to_target_location(spellcards_path, True)
+        character_sheet_location = input("Location of character sheet: ")
+        copy_to_target_location(character_sheet_location, False)
+        print(f"Directories were successfully created")
+        make_spellcard_folder()
     
     get_character_sheet_text(character_name)
 
@@ -113,7 +136,7 @@ def clean_file_name(file_name):
 
 def copy_spells_in_spellfolder(potential_spells):
     spellcards_folder = os.path.join(dnd_folder_path, "Spell Cards")
-    spells_for_character = os.path.join(dnd_folder_path, "Spellcards Mamas Charakter")
+    spells_for_character = os.path.join(dnd_folder_path, f"Spellcards {character_name}")
 
     # Create the spells_for_character folder if it doesn't exist
     if not os.path.exists(spells_for_character):
