@@ -6,6 +6,7 @@ import glob
 import sys
 
 #kekse
+kekse = "keks"
 arguments = sys.argv
 
 def copy_to_target_location(path, is_Spellcards):
